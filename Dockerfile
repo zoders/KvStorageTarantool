@@ -1,5 +1,6 @@
 FROM ubuntu:16.04
 
+COPY scripts/install-tarantool.sh ./install-tarantool.sh
 RUN chmod +x ./install-tarantool.sh
 RUN ./install-tarantool.sh
 
