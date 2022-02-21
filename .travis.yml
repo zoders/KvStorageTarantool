@@ -1,17 +1,13 @@
-language: python
-
 sudo: required
 
 services:
   - docker
 
 install:
-  - pip install requests simplejson 
   - make docker
   - make run
 
 script:
-  - make tests
   - make log
   - make stop
 
