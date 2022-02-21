@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
-RUN chmod +x install-tarantool.sh
-RUN install-tarantool.sh
+RUN chmod +x ./install-tarantool.sh
+RUN ./install-tarantool.sh
 
 RUN useradd -m tarantool_user
 USER tarantool_user
