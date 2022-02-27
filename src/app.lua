@@ -107,7 +107,7 @@ end
 local function get_tuple(req)
 	local key = req:stash('key')
 	
-	server:pause()
+	server:stop()
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
 		local resp = req:render{json = { info = "(GET) this key doesn't exist" }}
