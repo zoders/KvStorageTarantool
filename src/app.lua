@@ -26,6 +26,17 @@ box.once('schema',
 	end
 )
 
+local function get_port(env_port, default)
+    local port = os.getenv(env_port)
+    io.write("PORT is " .. port)
+    if port == nil then
+        return default
+    end
+    return port
+end
+
+server = httpd.new('0.0.0.0', get_port("PORT", 5000))
+
 local function info(req)
 	local resp = req:render{json = {
         api = {
@@ -35,7 +46,6 @@ local function info(req)
     }}
 	resp.status = 200
 	log.info("(200) getting info")
-	--server:stop()
 	return resp
 end
 
@@ -106,6 +116,8 @@ local function delete(req)
 end
 
 local function get_tuple(req)
+
+	server:stop()
 	local key = req:stash('key')
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
@@ -159,16 +171,7 @@ local function update(req)
 	return resp
 end
 
-local function get_port(env_port, default)
-    local port = os.getenv(env_port)
-    io.write("PORT is " .. port)
-    if port == nil then
-        return default
-    end
-    return port
-end
 
-server = httpd.new('0.0.0.0', get_port("PORT", 5000))
 server:route({ path = '/', method = 'GET' }, info)
 server:route({ path = '/kv', method = 'POST' }, create)
 server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
