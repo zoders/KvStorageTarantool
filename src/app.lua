@@ -25,7 +25,7 @@ box.once('schema',
 		)
 	end
 )
-
+x = 1
 local function info(req)
 	local resp = req:render{json = {
         api = {
@@ -106,7 +106,7 @@ end
 
 local function get_tuple(req)
 	local key = req:stash('key')
-
+	x = 2
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
 		local resp = req:render{json = { info = "(GET) this key doesn't exist" }}
@@ -175,6 +175,6 @@ server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
 server:route({ path = '/kv/:key', method = 'GET' }, get_tuple)
 server:route({ path = '/kv/:key', method = 'PUT' }, update)
 server:start()
-if 2 == 2 then
+if 2 == x then
 	server:pause()
 end
