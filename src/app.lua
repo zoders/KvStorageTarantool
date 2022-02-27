@@ -38,13 +38,19 @@ local function get_port(env_port, default)
 end
 
 server = httpd.new('0.0.0.0', get_port("PORT", 5000))
+x = 0
+
+local function stop_server()
+	server:stop()
+end
 
 local function info(req)
+	x = x + 1
 	local resp = req:render{json = {
         api = {
             " - POST /kv body: {key: \"test\", \"value\": {SOME ARBITRARY JSON}} - PUT kv/{id} body: {\"value\": {SOME ARBITRARY JSON}} - GET kv/{id} - DELETE kv/{id}"
         },
-        info = "hello, this is my test task for Tarantool"
+        info = "hello, this is my test task for Tarantool"..x
     }}
 	resp.status = 200
 	log.info("(200) getting info")
@@ -118,10 +124,6 @@ local function delete(req)
 end
 
 local function get_tuple(req)
-
-	server:stop()
-	fiber.sleep(60)
-	server:start()
 	local key = req:stash('key')
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
