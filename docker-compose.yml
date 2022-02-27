@@ -1,0 +1,9 @@
+ version: '2'
+ services:
+   pserver:
+     build: src
+   phttp:
+     depends_on: 
+       - pserver
+     build: http
+
