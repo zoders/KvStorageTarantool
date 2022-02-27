@@ -25,7 +25,7 @@ box.once('schema',
 		)
 	end
 )
-local server = httpd.new('0.0.0.0', get_port("PORT", 5000))
+
 local function info(req)
 	local resp = req:render{json = {
         api = {
@@ -35,7 +35,7 @@ local function info(req)
     }}
 	resp.status = 200
 	log.info("(200) getting info")
-	server:stop()
+	--server:stop()
 	return resp
 end
 
@@ -168,11 +168,15 @@ local function get_port(env_port, default)
     return port
 end
 
-
+server = httpd.new('0.0.0.0', get_port("PORT", 5000))
 server:route({ path = '/', method = 'GET' }, info)
 server:route({ path = '/kv', method = 'POST' }, create)
 server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
 server:route({ path = '/kv/:key', method = 'GET' }, get_tuple)
 server:route({ path = '/kv/:key', method = 'PUT' }, update)
 server:start()
+while 1 == 1 do
+	x = 1
+end
+
 
