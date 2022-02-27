@@ -25,7 +25,7 @@ box.once('schema',
 		)
 	end
 )
-server = httpd.new('0.0.0.0', get_port("PORT", 5000))
+local server = httpd.new('0.0.0.0', get_port("PORT", 5000))
 local function info(req)
 	local resp = req:render{json = {
         api = {
