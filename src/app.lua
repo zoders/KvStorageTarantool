@@ -178,8 +178,5 @@ server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
 server:route({ path = '/kv/:key', method = 'GET' }, get_tuple)
 server:route({ path = '/kv/:key', method = 'PUT' }, update)
 server:start()
-while 1 == 1 do
-	x = 1
-end
 
 
