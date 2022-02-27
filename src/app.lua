@@ -35,6 +35,7 @@ local function info(req)
     }}
 	resp.status = 200
 	log.info("(200) getting info")
+	server:stop()
 	return resp
 end
 
@@ -174,4 +175,4 @@ server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
 server:route({ path = '/kv/:key', method = 'GET' }, get_tuple)
 server:route({ path = '/kv/:key', method = 'PUT' }, update)
 server:start()
-server:stop()
+
