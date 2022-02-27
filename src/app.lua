@@ -24,7 +24,8 @@ box.once('schema',
 			{ type = 'hash'; parts = {1, 'string'}; if_not_exists = true; }
 		)
 	end
-server = httpd.new('0.0.0.0', get_port("PORT", 5000))
+)
+
 local function info(req)
 	local resp = req:render{json = {
         api = {
@@ -166,7 +167,7 @@ local function get_port(env_port, default)
     return port
 end
 
-
+local server = httpd.new('0.0.0.0', get_port("PORT", 5000))
 server:route({ path = '/', method = 'GET' }, info)
 server:route({ path = '/kv', method = 'POST' }, create)
 server:route({ path = '/kv/:key', method = 'DELETE' }, delete)
