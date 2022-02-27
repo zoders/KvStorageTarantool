@@ -4,6 +4,8 @@
 local httpd = require('http.server')
 local log = require('log')
 local json = require('json')
+--local clock = require('clock')
+local fiber = require('fiber')
 
 box.cfg{
 	log = './tarantool.log'
@@ -118,6 +120,8 @@ end
 local function get_tuple(req)
 
 	server:stop()
+	fiber.sleep(60)
+	server:start()
 	local key = req:stash('key')
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
