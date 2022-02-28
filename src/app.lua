@@ -4,7 +4,7 @@
 local httpd = require('http.server')
 local log = require('log')
 local json = require('json')
---local clock = require('clock')
+local clock = require('clock')
 local fiber = require('fiber')
 
 box.cfg{
@@ -38,14 +38,37 @@ local function get_port(env_port, default)
 end
 
 server = httpd.new('0.0.0.0', get_port("PORT", 5000))
-x = 0
 
-local function stop_server()
-	server:stop()
+requests = 0
+start_time = 0
+ms = 1000000
+duration = 10000 * ms
+limit_req = 2
+sleep_time = 60
+
+local increment_requests()
+	if requests == 0 then
+		start_time = clock.realtime64()
+	end
+	requests = requests + 1
+	if start_time + duration < clock.realtime64() then
+		requests = 0
+	end
+	
+end
+
+local function try_stop_server()
+	if (start_time + duration >= clock.realtime64()) and (requests > limit_req) then
+		server:stop()
+		fiber.sleep(sleep_time)
+		requests = 0
+		server:start()
+	end
 end
 
 local function info(req)
-	x = x + 1
+	increment_requests()
+	try_stop_server()
 	local resp = req:render{json = {
         api = {
             " - POST /kv body: {key: \"test\", \"value\": {SOME ARBITRARY JSON}} - PUT kv/{id} body: {\"value\": {SOME ARBITRARY JSON}} - GET kv/{id} - DELETE kv/{id}"
