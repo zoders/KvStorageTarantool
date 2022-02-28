@@ -48,17 +48,17 @@ sleep_time = 60
 
 local increment_requests()
 	if requests == 0 then
-		start_time = fiber.time64()
+		start_time = 0
 	end
 	requests = requests + 1
-	if start_time + duration < fiber.time64() then
+	if start_time + duration < 0 then
 		requests = 0
 	end
 	
 end
 
 local function try_stop_server()
-	if (start_time + duration >= fiber.time64()) and (requests > limit_req) then
+	if (start_time + duration >= 0) and (requests > limit_req) then
 		server:stop()
 		fiber.sleep(sleep_time)
 		requests = 0
