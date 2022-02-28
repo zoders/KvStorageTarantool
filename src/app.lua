@@ -51,7 +51,7 @@ local increment_requests()
 		start_time = clock.time64()
 	end
 	requests = requests + 1
-	if start_time + duration < clock.realtime64() then
+	if start_time + duration < clock.time64() then
 		requests = 0
 	end
 	
