@@ -67,8 +67,8 @@ local function try_stop_server()
 end
 
 local function info(req)
-	increment_requests()
-	try_stop_server()
+	--increment_requests()
+	--try_stop_server()
 	local resp = req:render{json = {
         api = {
             " - POST /kv body: {key: \"test\", \"value\": {SOME ARBITRARY JSON}} - PUT kv/{id} body: {\"value\": {SOME ARBITRARY JSON}} - GET kv/{id} - DELETE kv/{id}"
