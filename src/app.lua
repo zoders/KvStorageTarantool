@@ -46,17 +46,17 @@ duration = 10000 * ms
 limit_req = 2
 sleep_time = 60
 
---local increment_requests()
---	if requests == 0 then
---		start_time = clock.realtime64()
---	end
---	requests = requests + 1
---	if start_time + duration < clock.realtime64() then
---		requests = 0
---	end
---	
---end
---
+local increment_requests()
+	if requests == 0 then
+		start_time = clock.realtime64()
+	end
+	requests = requests + 1
+	if start_time + duration < clock.realtime64() then
+		requests = 0
+	end
+	
+end
+
 --local function try_stop_server()
 --	if (start_time + duration >= clock.realtime64()) and (requests > limit_req) then
 --		server:stop()
@@ -67,13 +67,13 @@ sleep_time = 60
 --end
 
 local function info(req)
-	--increment_requests()
+	increment_requests()
 	--try_stop_server()
 	local resp = req:render{json = {
         api = {
             " - POST /kv body: {key: \"test\", \"value\": {SOME ARBITRARY JSON}} - PUT kv/{id} body: {\"value\": {SOME ARBITRARY JSON}} - GET kv/{id} - DELETE kv/{id}"
         },
-        info = "hello, this is my test task for Tarantool"..x
+        info = "hello, this is my test task for Tarantool "..requests
     }}
 	resp.status = 200
 	log.info("(200) getting info")
