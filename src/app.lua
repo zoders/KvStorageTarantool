@@ -48,7 +48,7 @@ sleep_time = 60
 
 local increment_requests()
 	if requests == 0 then
-		start_time = clock.realtime64()
+		start_time = clock.time64()
 	end
 	requests = requests + 1
 	if start_time + duration < clock.realtime64() then
