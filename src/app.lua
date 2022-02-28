@@ -42,9 +42,10 @@ server = httpd.new('0.0.0.0', get_port("PORT", 5000))
 requests = 0
 start_time = 0
 ms = 1000
-duration = 10000 * ms
-limit_req = 2
+duration = 1000 * ms
+limit_req = 50
 sleep_time = 60
+
 
 local function increment_requests()
 	if requests == 0 then
@@ -73,7 +74,7 @@ local function info(req)
         api = {
             " - POST /kv body: {key: \"test\", \"value\": {SOME ARBITRARY JSON}} - PUT kv/{id} body: {\"value\": {SOME ARBITRARY JSON}} - GET kv/{id} - DELETE kv/{id}"
         },
-        info = "hello, this is my test task for Tarantool "..requests
+        info = "hello, this is my test task for Tarantool "
     }}
 	resp.status = 200
 	log.info("(200) getting info")
@@ -96,6 +97,8 @@ end
 	
 
 local function create(req)
+	increment_requests()
+	try_stop_server()
 	local body = read_json(req)
 	
 	if ( type(body) == 'string' ) then
@@ -127,6 +130,8 @@ end
 
 
 local function delete(req)
+	increment_requests()
+	try_stop_server()
 	local key = req:stash('key')
 
 	local tuple = box.space.kvstorage:select(key)
@@ -147,6 +152,8 @@ local function delete(req)
 end
 
 local function get_tuple(req)
+	increment_requests()
+	try_stop_server()
 	local key = req:stash('key')
 	local tuple = box.space.kvstorage:select{ key }
 	if( table.getn( tuple ) == 0 ) then
@@ -164,6 +171,8 @@ local function get_tuple(req)
 end
 
 local function update(req)
+	increment_requests()
+	try_stop_server()
 	local body = read_json(req)
 	
 	if ( type(body) == 'string' ) then
